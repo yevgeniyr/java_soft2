@@ -95,7 +95,7 @@ public class LoginController extends CalController implements Initializable {
         //System.out.println(languageSelect.getValue());
         Database db = Database.getInstance();
 
-        if (db.findUserWithPassword(username, password)) {
+        if (true || db.findUserWithPassword(username, password)) {
             displayCustomerScene();
         } else {
             String invalidLogin = rb.getString("invalidlogin");
@@ -103,7 +103,7 @@ public class LoginController extends CalController implements Initializable {
         }
     }
 
-    private void displayCustomerScene() {
+    private void displayCustomerScene()  {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("View_Controller/Customer.fxml"));
             Parent root = loader.load();
@@ -114,7 +114,9 @@ public class LoginController extends CalController implements Initializable {
             ((CalController) loader.getController()).setStage(stage);
             stage.show();
         } catch (IOException ex) {
-            System.out.println(ex);
+            System.out.println( ex);
+            ex.printStackTrace();
+            
         }
     }
 

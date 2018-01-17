@@ -3,22 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/Cal_ru_RU.properties</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/NewCustomer.fxml</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/Appointment.fxml</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/CalController.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/Model/Address.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/Model/Appointment.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/yevgeniycal/YevgeniyCal.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/CustomerController.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/Model/City.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/Model/Customer.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/Customer.fxml</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/LoginController.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/Model/Country.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/Choice.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/database/Database.java</file>
-            <file>file:/Users/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/AppointmentController.java</file>
+            <file>file:/home/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/CustomerController.java</file>
+            <file>file:/home/yevgeniy/java_soft2/yevgeniycal/src/yevgeniycal/YevgeniyCal.java</file>
+            <file>file:/home/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/Login.fxml</file>
+            <file>file:/home/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/LoginController.java</file>
+            <file>file:/home/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/CalController.java</file>
+            <file>file:/home/yevgeniy/java_soft2/yevgeniycal/src/View_Controller/AppointmentController.java</file>
+            <file>file:/home/yevgeniy/java_soft2/yevgeniycal/build/classes/Cal_ru_RU.properties</file>
+            <file>file:/home/yevgeniy/java_soft2/yevgeniycal/src/database/Database.java</file>
         </group>
     </open-files>
 </project-private>

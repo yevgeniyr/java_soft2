@@ -29,9 +29,15 @@ public class Database {
 
     private void connectMysql() {
 
+//        String driver = "com.mysql.jdbc.Driver";
+//        String db = "U04iex";
+//        String url = "jdbc:mysql://52.206.157.109/" + db;
+//        String user = "U04iex";
+//        String pass = "53688251641";
+
         String driver = "com.mysql.jdbc.Driver";
         String db = "U04iex";
-        String url = "jdbc:mysql://52.206.157.109/" + db;
+        String url = "jdbc:mysql://localhost/" + db;
         String user = "U04iex";
         String pass = "53688251641";
 

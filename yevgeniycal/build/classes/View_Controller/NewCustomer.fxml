@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="430.0" prefWidth="315.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="View_Controller.CustomerController">
+   <children>
+      <Text layoutX="26.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="city :" />
+      <TextField layoutX="26.0" layoutY="103.0" prefHeight="27.0" prefWidth="269.0" promptText="address" />
+      <TextField layoutX="26.0" layoutY="143.0" prefHeight="27.0" prefWidth="269.0" promptText="address2" />
+      <TextField layoutX="26.0" layoutY="70.0" prefHeight="27.0" prefWidth="269.0" promptText="phone" />
+      <ChoiceBox layoutX="26.0" layoutY="212.0" prefHeight="27.0" prefWidth="269.0" />
+      <ChoiceBox layoutX="26.0" layoutY="331.0" prefHeight="27.0" prefWidth="269.0" />
+      <Text layoutX="26.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Country :" wrappingWidth="68.89599609375" />
+      <TextField layoutX="26.0" layoutY="263.0" prefHeight="27.0" prefWidth="269.0" promptText="postal code" />
+      <TextField layoutX="26.0" layoutY="33.0" prefHeight="27.0" prefWidth="269.0" promptText="Customer Name" />
+      <Button layoutX="26.0" layoutY="393.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="269.0" text="Save" />
+   </children>
+</AnchorPane>
