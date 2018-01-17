@@ -11,10 +11,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import Model.Part;
-import Model.Product;
+
 import java.util.Optional;
 import javafx.scene.control.ButtonType;
+import yevgeniycal.YevgeniyCal;
 
 /**
  *
@@ -23,8 +23,9 @@ import javafx.scene.control.ButtonType;
 public class CalController {
 
     private Stage dialogStage;
-
-    Object invocator;
+     Stage stage;
+    
+    YevgeniyCal invocator;
     Object invocatorData;
 
     public void setDialogStage(Stage dialogStage) {
@@ -50,7 +51,11 @@ public class CalController {
     }
 
     public void setInvocator(Object invocator) {
-        this.invocator = invocator;
+        this.invocator = (YevgeniyCal)invocator;
+    }
+    
+    public void setStage(Stage _stage) {
+        stage = _stage;
     }
 
     public void setInvocatorData(Object invocatorData) {
@@ -99,63 +104,8 @@ public class CalController {
         return true;
     } 
     
-    boolean validate(Part part) {
-        if (part.getInStock() > part.getMax()) {
-            showErrorDialog("inventory can't be bigger than max");
-            return false;
-        }
-        if (part.getInStock() < part.getMin()) {
-            showErrorDialog("inventory can't be lower than min");
-            return false;
-        }
-        if (part.getMin() > part.getMax()) {
-            showErrorDialog("min can't be bigger than max");
-            return false;
-        }
-
-        if (part.getMax() < part.getMin()) {
-            showErrorDialog("max can't be smaller than min");
-            return false;
-        }
-
-        return true;
-    }
-
-    boolean validate(Product product) {
-        
-        if (product.getInStock() > product.getMax()) {
-            showErrorDialog("inventory can't be bigger than max");
-            return false;
-        }
-        if (product.getInStock() < product.getMin()) {
-            showErrorDialog("inventory can't be lower than min");
-            return false;
-        }
-        if (product.getMin() > product.getMax()) {
-            showErrorDialog("min can't be bigger than max");
-            return false;
-        }
-
-        if (product.getMax() < product.getMin()) {
-            showErrorDialog("max can't be smaller than min");
-            return false;
-        }
-
-        if (product.getPartsList().isEmpty()) {
-            showErrorDialog("product must have at least one part");
-            return false;
-        }
-        
-        //System.out.println("priceOfParts" + product.priceOfParts());
-        //System.out.println("price" + product.getPrice());
-        
-        if ( product.getPrice() < product.priceOfParts()  ) {
-            showErrorDialog("The product's price can't be smaller than the sum of prices of its parts");
-            return false;
-        }
-        return true;
-    }
-
+  
+   
     boolean showConfirmDialog(String msg) {
         Alert alert = new Alert(AlertType.CONFIRMATION,
                 msg, 
