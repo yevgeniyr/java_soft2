@@ -40,12 +40,14 @@ public class YevgeniyCal extends Application {
      private void displayLogin(Stage stage)    { 
         try {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("View_Controller/Login.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("View_Controller/Customer.fxml"));
+        
         Parent root = loader.load();
         
         Scene scene = new Scene(root);        
         
         stage.setScene(scene);
-        ((CalController) loader.getController()).setInvocator(this);
+        //((CalController) loader.getController()).setInvocator(this);
                ((CalController) loader.getController()).setStage(stage);
         stage.show();
         }

@@ -6,18 +6,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="430.0" prefWidth="315.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="View_Controller.CustomerController">
+<AnchorPane id="AnchorPane" prefHeight="372.0" prefWidth="315.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.NewCustomerController">
    <children>
+      <TextField fx:id="newCustomerName" layoutX="26.0" layoutY="33.0" prefHeight="27.0" prefWidth="269.0" promptText="Customer Name" />
+      <TextField fx:id="newPhone" layoutX="26.0" layoutY="70.0" prefHeight="27.0" prefWidth="269.0" promptText="phone" />
+      <TextField fx:id="newAddress" layoutX="26.0" layoutY="103.0" prefHeight="27.0" prefWidth="269.0" promptText="address" />
+      <TextField fx:id="newAddress2" layoutX="26.0" layoutY="143.0" prefHeight="27.0" prefWidth="269.0" promptText="address2" />
       <Text layoutX="26.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="city :" />
-      <TextField layoutX="26.0" layoutY="103.0" prefHeight="27.0" prefWidth="269.0" promptText="address" />
-      <TextField layoutX="26.0" layoutY="143.0" prefHeight="27.0" prefWidth="269.0" promptText="address2" />
-      <TextField layoutX="26.0" layoutY="70.0" prefHeight="27.0" prefWidth="269.0" promptText="phone" />
-      <ChoiceBox layoutX="26.0" layoutY="212.0" prefHeight="27.0" prefWidth="269.0" />
-      <ChoiceBox layoutX="26.0" layoutY="331.0" prefHeight="27.0" prefWidth="269.0" />
-      <Text layoutX="26.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Country :" wrappingWidth="68.89599609375" />
-      <TextField layoutX="26.0" layoutY="263.0" prefHeight="27.0" prefWidth="269.0" promptText="postal code" />
-      <TextField layoutX="26.0" layoutY="33.0" prefHeight="27.0" prefWidth="269.0" promptText="Customer Name" />
-      <Button layoutX="26.0" layoutY="393.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="269.0" text="Save" />
+      <ChoiceBox fx:id="newCitiesChoiceBox" layoutX="26.0" layoutY="212.0" prefHeight="27.0" prefWidth="269.0" />
+      <TextField fx:id="newPostalCode" layoutX="26.0" layoutY="263.0" prefHeight="27.0" prefWidth="269.0" promptText="postal code" />
+      <Button fx:id="save" layoutX="23.0" layoutY="322.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="27.0" prefWidth="269.0" text="Save" />
    </children>
 </AnchorPane>

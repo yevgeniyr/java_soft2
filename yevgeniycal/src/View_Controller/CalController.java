@@ -25,7 +25,8 @@ public class CalController {
     private Stage dialogStage;
      Stage stage;
     
-    YevgeniyCal invocator;
+    CalController invocator;
+    
     Object invocatorData;
 
     public void setDialogStage(Stage dialogStage) {
@@ -51,7 +52,7 @@ public class CalController {
     }
 
     public void setInvocator(Object invocator) {
-        this.invocator = (YevgeniyCal)invocator;
+        this.invocator = (CalController)invocator;
     }
     
     public void setStage(Stage _stage) {
@@ -115,16 +116,5 @@ public class CalController {
 
         return showAndWait.get() == ButtonType.YES;
     }
-//
-//•  ensuring that a 
-//2.  Set 2
-//•  preventing the user from deleting a product that has a part assigned to it
-//
-//•  including a confirm dialogue for all “Delete” and “Cancel” buttons
-//
-//•  ensuring that the price of a product cannot be less than the cost of the parts
-//
-//•  ensuring that a product must have a name, price, and inventory level (default 0)
-//    
-//    }
+
 }

@@ -22,6 +22,10 @@ public class City {
         id = _id; 
         name = _name; 
     }
+
+    public City() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     @Override public String toString() { return name; }
     @Override public boolean equals(Object o) {
       return  Objects.equals(((City)o).id, this.id);

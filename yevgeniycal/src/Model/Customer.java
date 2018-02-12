@@ -5,11 +5,17 @@
  */
 package Model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author yevgeniy
  */
 public class Customer {
+
+    public Customer() {
+       
+    }
 
     public int getCustomerId() {
         return customerId;
@@ -51,10 +57,24 @@ public class Customer {
         this.address = address;
     }
 
-
-    
     public String toString() {
         return getCustomerName();
+    }
+    
+    public void setAppointments(ArrayList<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+    
+    public ArrayList<Appointment> getAppointments() {
+        return this.appointments;
+    }
+    
+    public Customer(int customerId, String customerName, int active, Address address) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.active = active;
+        this.address = address;
+        this.appointments = appointments;
     }
     
     int customerId;
@@ -62,15 +82,5 @@ public class Customer {
     int active;
     int addressId;
     Address address;
-
-    public Customer(int customerId, String customerName, int active, Address address) {
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.active = active;
-        this.address = address;
-    }
-    
-    
-    
-    
+    ArrayList<Appointment> appointments;
 }

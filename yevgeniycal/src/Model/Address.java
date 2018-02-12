@@ -5,6 +5,8 @@
  */
 package Model;
 
+import java.util.Date;
+
 /**
  *
  * @author yevgeniy
@@ -65,6 +67,7 @@ public class Address {
     String postalCode;
     String phone;
 
+
     /**
      *
      * @param addressId
@@ -85,6 +88,11 @@ public class Address {
     
     @Override
     public String toString(){
-        return phone + "\n" + address + "\n" + address2 + "\n" + city + postalCode;
+        if (address2 != null && !address2.isEmpty()) {
+            return phone + "\n" + address + "\n" + address2 + "\n" + city + ", " + postalCode;
+        }
+        else {
+            return phone + "\n" + address + "\n" +  city + ", " +  postalCode;
+        }
     }
 }

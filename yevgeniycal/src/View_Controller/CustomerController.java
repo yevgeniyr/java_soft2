@@ -10,6 +10,8 @@ import Model.Customer;
 import database.Database;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,11 +23,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -46,6 +50,9 @@ public class CustomerController extends CalController implements Initializable {
     TextArea addressTextArea;
     @FXML
     Label customerName;
+    
+    @FXML Button newCustomerButton;
+    
     @FXML
     TableView appointmentsTableView;
     @FXML
@@ -58,10 +65,38 @@ public class CustomerController extends CalController implements Initializable {
     TableColumn contactTableColumn;
     @FXML
     TableColumn urlTableColumn;
+    
+    @FXML
+    TableColumn startTableColumn;
+
+    @FXML
+    TableColumn endTableColumn;
 
     @FXML
     Button newAppointmentButton;
 
+    @FXML ChoiceBox<String> monthsChoiceBox;
+    
+    @FXML ChoiceBox<String> weeksChoiceBox;
+    
+    final String[] months = new String[]{
+        "All", 
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",  
+        "June", 
+        "July", 
+        "August",
+        "September",    
+        "October",
+        "November",
+        "December"
+    };    
+    
+    ObservableList<Customer> choices;
+            
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -86,39 +121,127 @@ public class CustomerController extends CalController implements Initializable {
         urlTableColumn.setCellValueFactory(
                 new PropertyValueFactory<Appointment, String>("url")
         );
+        
+        startTableColumn.setCellValueFactory(
+                new PropertyValueFactory<Appointment,Date>("startDate")
+        );
+        
+        endTableColumn.setCellValueFactory(
+                new PropertyValueFactory<Appointment,Date>("endDate")
+        );
 
-        ObservableList<Appointment> appointments
-                = FXCollections.observableArrayList(
-                        new Appointment(1, 1, "Meet for coffee",
-                                "this is desc", "5 & 58 main ave", "contact", "http://this.url")
-                );
+//        ObservableList<Appointment> appointments
+//                = FXCollections.observableArrayList(
+//                        new Appointment(1, 1, "Meet for coffee",
+//                                "this is desc", "5 & 58 main ave", "contact", "http://this.url")
+//                );
 
-        appointmentsTableView.setItems(appointments); // addItems(appointments);
+        
 
-        ObservableList<Customer> choices = FXCollections.observableArrayList();
+        choices = FXCollections.observableArrayList();
 
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        appointmentsTableView.setItems(appointments); 
+ 
+        
 //choices.add(new Choice(null, "No selection"));
         for (Customer customer : db.getCustomers()) {
             choices.add(customer);
         }
         customers.getItems().addAll(choices);
 
+        
         customers.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Customer>() {
-            @Override
+            
+                    @Override
             public void changed(ObservableValue<? extends Customer> observableValue,
                     Customer oldCustomer, Customer newCustomer) {
 
+                if ( newCustomer == null ) {
+                    System.out.println("newCustomer is null");
+                    return;
+                }
+                if ( newCustomer.getAddress() == null ) {
+                    System.out.println("newCustomer.getAddress is null");
+                }
+                        
+                System.out.println(newCustomer.getAddress().toString());
+                
                 addressTextArea.setText(newCustomer.getAddress().toString());
+                
                 customerName.setText("Appointment with " + newCustomer.getCustomerName());
-                //newCustomer.address();
+                
+                appointments.clear();
+
+                ArrayList<Appointment> appointments = newCustomer.getAppointments(); 
+                
+                if (appointments != null) { 
+                    appointments.addAll(appointments);
+                }
+
+                ((TableColumn)appointmentsTableView.getColumns().get(0)).setVisible(false);
+                ((TableColumn)appointmentsTableView.getColumns().get(0)).setVisible(true);
 
             }
         });
 
+        monthsChoiceBox.getItems().addAll(months);
+        monthsChoiceBox.setValue("All");
+        weeksChoiceBox.getItems().addAll("All","1","2","3","4");
+        weeksChoiceBox.setValue("All");
+                
+        newCustomerButton.setOnAction(e -> {
+            showDialog("Add Customer","View_Controller/NewCustomer.fxml");
+        });
         newAppointmentButton.setOnAction(e -> showNewAppointmentScene());
     }
+    
+    
+    public int getCurrentCustomerId() {
+        return ((Customer)customers.getSelectionModel().getSelectedItem()).getCustomerId();
+    }
+    
+    public void addCustomerToListView(Customer customer) {
+        choices.add(customer);
+        customers.setItems(choices);
+        
+    }
+    public FXMLLoader getResource(String resource) {
+        return new FXMLLoader(getClass().getClassLoader().getResource(resource));
+    }
 
+    public void showDialog(String title, String sceneFXML) {
+        showDialog(title, sceneFXML, null);
+    }
+        
+    public void showDialog(String title, String sceneFXML, Object invocatorData) {
+        //get reference to the button's stage         
+        //Stage =(Stage) addpartbutton.getScene().getWindow();
+        //load up OTHER FXML document
+        try {
+            FXMLLoader loader = getResource(sceneFXML);
+            Parent root;
+
+            root = loader.load();
+
+            Stage _dialogStage = new Stage();
+            _dialogStage.setTitle(title);
+            Scene scene = new Scene(root);
+            _dialogStage.setScene(scene);
+            CalController ctrl = loader.getController();
+            ctrl.setDialogStage(_dialogStage);
+            ctrl.setInvocator(this);
+            ctrl.setInvocatorData(invocatorData);
+            //ctrl.postInit();
+            //ctrl.populateControls();
+            
+            _dialogStage.showAndWait();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }    
+    
     private void showNewAppointmentScene() {
         try {
             Stage _stage = new Stage();
@@ -137,5 +260,9 @@ public class CustomerController extends CalController implements Initializable {
 
         }
 
+    }
+
+    void addCustomer(Customer customer) {
+        
     }
 }

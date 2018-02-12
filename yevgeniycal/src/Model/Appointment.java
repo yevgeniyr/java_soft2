@@ -5,26 +5,36 @@
  */
 package Model;
 
+import java.util.Date;
+
 /**
  *
  * @author yevgeniy
  */
 public class Appointment {
 
-    public Appointment(int appointmentId, int customerId, String title, String description, String location, String contact, String url) {
-        this.appointmentId = appointmentId;
+    public Appointment(int customerId, 
+            String title, 
+            String description,
+            String location, 
+            String contact, 
+            String url, 
+            Date startDate, 
+            Date endDate) {
         this.customerId = customerId;
-        //this.customer = customer;
+
         this.title = title;
         this.description = description;
         this.location = location;
         this.contact = contact;
         this.url = url;
+        this.startDate = startDate;
+        this.endDate = endDate;
+            
     }
-    int appointmentId;
-    int customerId;
-    Customer customer;
 
+
+ 
     public int getAppointmentId() {
         return appointmentId;
     }
@@ -83,10 +93,32 @@ public class Appointment {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    int appointmentId;
+    int customerId;
+
     String title;
     String description;
     String location;
     String contact;
     String url;
-    
+    Date startDate;
+    Date endDate;
 }

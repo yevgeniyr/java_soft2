@@ -5,6 +5,7 @@
  */
 package View_Controller;
 
+import Model.User;
 import database.Database;
 import java.io.IOException;
 import java.net.URL;
@@ -58,10 +59,14 @@ public class LoginController extends CalController implements Initializable {
     Locale locale;
     ResourceBundle rb;
 
+    static User currentUser = null;
+            
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //languageSelect = "Russian", "Japanese"));
 
+        currentUser = null;
+        
         final String[] languages = new String[]{"English", "Russian", "French"};
 
         //new javafx.scene.control.ChoiceBox(FXCollections.observableArrayList(
@@ -69,14 +74,18 @@ public class LoginController extends CalController implements Initializable {
         //languageSelect.getItems().add();
         //languageSelect.getItems().add("English");
         //languageSelect.setValue("English");
-        Locale.setDefault(new Locale("ru", "RU"));
+        //Locale.setDefault(new Locale("ru", "RU"));
         locale = Locale.getDefault();
         changeLocale(locale);
 
         loginButton.setOnAction(e -> checkLogin(username.getText(), password.getText()));
-
+        
     }
 
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+    
     private void changeLocale(Locale locale) {
         rb = ResourceBundle.getBundle("Cal", locale);
         //System.out.println(rb.getString("invalidlogin"));
@@ -94,8 +103,11 @@ public class LoginController extends CalController implements Initializable {
 
         //System.out.println(languageSelect.getValue());
         Database db = Database.getInstance();
-
-        if (true || db.findUserWithPassword(username, password)) {
+        
+        int userId = db.getUserId(username, password);
+        System.out.println("got userId" + userId);
+        if (userId >= 0) {
+            currentUser = new User(username,userId);
             displayCustomerScene();
         } else {
             String invalidLogin = rb.getString("invalidlogin");

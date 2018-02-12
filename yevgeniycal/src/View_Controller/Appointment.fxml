@@ -6,22 +6,17 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="709.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AppointmentController">
+<AnchorPane id="AnchorPane" prefHeight="709.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AppointmentController">
    <children>
-      <TextField layoutX="96.0" layoutY="38.0" prefHeight="26.0" prefWidth="891.0" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="5.0" />
-      <TextField layoutX="96.0" layoutY="82.0" prefHeight="26.0" prefWidth="891.0" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="5.0" />
-      <TextField layoutX="96.0" layoutY="125.0" />
-      <TextField layoutX="98.0" layoutY="169.0" prefHeight="26.0" prefWidth="718.0" AnchorPane.leftAnchor="98.0" AnchorPane.rightAnchor="24.0" />
-      <Label layoutX="24.0" layoutY="44.0" prefHeight="16.0" prefWidth="56.0" text="Title" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="912.0" />
-      <Label layoutX="8.0" layoutY="377.0" text="Description" />
-      <Label layoutX="27.0" layoutY="88.0" text="Location" />
-      <Label layoutX="27.0" layoutY="130.0" text="Contact" />
-      <Label layoutX="27.0" layoutY="176.0" text="URL" />
+      <TextField layoutX="14.0" layoutY="40.0" prefHeight="26.0" prefWidth="891.0" promptText="Title" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="87.0" />
+      <TextField layoutX="14.0" layoutY="81.0" prefHeight="26.0" prefWidth="891.0" promptText="Location" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="87.0" />
+      <TextField layoutX="14.0" layoutY="125.0" promptText="Contact" />
+      <TextField layoutX="14.0" layoutY="167.0" prefHeight="26.0" prefWidth="718.0" promptText="URL" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="108.0" />
       <Label layoutX="28.0" layoutY="233.0" text="Start" />
       <Label layoutX="37.0" layoutY="301.0" prefHeight="0.0" prefWidth="25.0" text="End" />
       <TextField layoutX="84.0" layoutY="233.0" prefHeight="26.0" prefWidth="32.0" />
-      <TextArea layoutX="5.0" layoutY="401.0" prefHeight="255.0" prefWidth="982.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-      <Button layoutX="869.0" layoutY="666.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="117.0" text="DONE" />
+      <TextArea layoutX="5.0" layoutY="354.0" prefHeight="255.0" prefWidth="982.0" promptText="Description" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+      <Button layoutX="869.0" layoutY="666.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="117.0" text="Add Appointment" />
       <Label layoutX="83.0" layoutY="214.0" prefHeight="16.0" prefWidth="41.0" text="Month" />
       <TextField layoutX="135.0" layoutY="233.0" prefHeight="26.0" prefWidth="32.0" />
       <Label layoutX="137.0" layoutY="214.0" text="Day" />
