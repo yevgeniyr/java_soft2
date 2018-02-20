@@ -97,9 +97,9 @@ public class NewCustomerController extends CalController implements Initializabl
         Customer customer  = getCustomer();
         
         System.out.println("got customer");
-        if (customer != null) {
-            ((CustomerController)invocator).addCustomerToListView(customer);
-            closeStage(actionEvent);
-        }
+        //if (customer != null) {
+        //    ((CustomerController)invocator).addCustomerToListView(customer);
+        //    closeStage(actionEvent);
+       // }
     }
 }

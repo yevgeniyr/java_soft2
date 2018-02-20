@@ -89,10 +89,10 @@ public class Address {
     @Override
     public String toString(){
         if (address2 != null && !address2.isEmpty()) {
-            return phone + "\n" + address + "\n" + address2 + "\n" + city + ", " + postalCode;
+            return   address + "\n" + address2 + "\n" + city + ", " + postalCode;
         }
         else {
-            return phone + "\n" + address + "\n" +  city + ", " +  postalCode;
+            return  address + "\n" +  city + ", " +  postalCode;
         }
     }
 }

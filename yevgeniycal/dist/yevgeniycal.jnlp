@@ -9,7 +9,7 @@
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
     <jar href="lib/mysql-connector-java-5.1.45-bin.jar" size="999810" download="eager" />
-    <jar href="yevgeniycal.jar" size="981761" download="eager" />
+    <jar href="yevgeniycal.jar" size="1002893" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="yevgeniycal" >
     <param name="requiredFXVersion" value="8.0+"/>

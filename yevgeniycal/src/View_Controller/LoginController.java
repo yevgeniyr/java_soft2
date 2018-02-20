@@ -78,7 +78,8 @@ public class LoginController extends CalController implements Initializable {
         locale = Locale.getDefault();
         changeLocale(locale);
 
-        loginButton.setOnAction(e -> checkLogin(username.getText(), password.getText()));
+        //loginButton.setOnAction(e -> checkLogin(username.getText(), password.getText()));
+        loginButton.setOnAction(e -> checkLogin("test","test"));
         
     }
 
@@ -108,22 +109,23 @@ public class LoginController extends CalController implements Initializable {
         System.out.println("got userId" + userId);
         if (userId >= 0) {
             currentUser = new User(username,userId);
-            displayCustomerScene();
+            displayMainScene();
         } else {
             String invalidLogin = rb.getString("invalidlogin");
             showErrorDialog(invalidLogin);
         }
     }
 
-    private void displayCustomerScene()  {
+    private void displayMainScene()  {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("View_Controller/Customer.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("View_Controller/MainScreen.fxml"));
             Parent root = loader.load();
 
             Scene scene = new Scene(root);
 
             stage.setScene(scene);
             ((CalController) loader.getController()).setStage(stage);
+            //stage.setMaximized(true);
             stage.show();
         } catch (IOException ex) {
             System.out.println( ex);
@@ -133,7 +135,7 @@ public class LoginController extends CalController implements Initializable {
     }
 
     @Override
-    void showErrorDialog(String errorMsg) {
+    public void showErrorDialog(String errorMsg) {
         //Alert alert = new Alert(Alert.AlertType.ERROR);
         Alert alert = new Alert(Alert.AlertType.ERROR);
         //alert.setTitle("Error Dialog");

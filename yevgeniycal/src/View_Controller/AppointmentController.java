@@ -8,103 +8,146 @@ package View_Controller;
 import Model.Appointment;
 import Model.Customer;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 /**
- * FXML Controller class
  *
  * @author yevgeniy
  */
-
-
-
-
 public class AppointmentController extends CalController implements Initializable {
-    @FXML Button addButton;
-    @FXML TextField title;
-    @FXML TextField location;
-    @FXML TextField contact;
-    @FXML TextField url;
-    @FXML TextArea description;
-    
-    
-    /**
-     * Initializes the controller class.
-     */
-    @Override
+
+    @FXML
+    TextField title;
+    @FXML
+    TextField location;
+    @FXML
+    TextField contact;
+    @FXML
+    TextField url;
+    @FXML
+    TextArea description;
+    @FXML
+    TextField startHour;
+    @FXML
+    TextField endHour;
+    @FXML
+    TextField startMinutes;
+    @FXML
+    TextField endMinutes;
+
+    @FXML
+    TextField startDay;
+    @FXML
+    TextField endDay;
+
+    @FXML
+    TextField startMonth;
+    @FXML
+    TextField endMonth;
+
+    @FXML
+    TextField startYear;
+    @FXML
+    TextField endYear;
+
+    @FXML
+    ListView customersListView;
+
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
+    }
+
+    public ZonedDateTime getZonedDateTimeFromControlls(
+            TextField month,
+            TextField day,
+            TextField year,
+            TextField hour,
+            TextField minutes) {
+
+        ZonedDateTime dt;
+        dt = ZonedDateTime.of(Integer.parseInt(year.getText()),
+                Integer.parseInt(month.getText()),
+                Integer.parseInt(day.getText()),
+                Integer.parseInt(hour.getText()),
+                Integer.parseInt(minutes.getText()),
+                0,
+                0,
+                ZoneId.systemDefault());
+
+        return dt;
+    }
+    
+    Appointment getAppointmentFromControlls() {
+        if (!checkEmpty(title.getText(), "Title Name")) {
+            return null;
+        }
+
+        if (!checkEmpty(location.getText(), "Location")) {
+            return null;
+        }
+
+        if (!checkEmpty(contact.getText(), "Contact")) {
+            return null;
+        }
+
+        if (!checkEmpty(url.getText(), "URL")) {
+            return null;
+        }
+        
+        if (!checkEmpty(startMonth.getText(), "Start month")) {
+            return null;
+        }
+        
+        if (!checkEmpty(startDay.getText(), "Start day")) {
+            return null;
+        }
+        
+         if (!checkEmpty(startYear.getText(), "Start year")) {
+            return null;
+        }
+         
+         if (!checkEmpty(startHour.getText(), "Start hour")) {
+            return null;
+        }
+         
+        if (!checkEmpty(startMinutes.getText(), "Start minutes")) {
+            return null;
+        }
         
 
-        addButton.setOnAction((event) -> handleSave());
-    
-    }
-     
-    private Appointment getAppointmentFromControlls() {
-        if (! checkEmpty(title.getText(), "Customer Name") ) {      
-            return null;
-        } 
-        
-        if (! checkEmpty(location.getText(), "Location") ) {      
+        Customer customer = (Customer) customersListView.getSelectionModel().getSelectedItem();
+
+        if (customer == null) {
+            showErrorDialog("Please select a customer from the list on the right");
             return null;
         }
-        
-        if (! checkEmpty(contact.getText(), "Contact") ) {      
-            return null;
-        }
-        
-        if (! checkEmpty(url.getText(), "URL") ) {      
-            return null;
-        }
-        
-        
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(0);
-        //cal.set(year, month, day, hour, minute, second);
-        cal.set(2018, 9, 23, 1, 1, 0);
-        Date startDate = cal.getTime(); // get back a Date object
-        Date endDate = cal.getTime(); // get back a Date object
-        
-                
-                
-        int customerId;
-        customerId = ((CustomerController)invocator).getCurrentCustomerId();
-        Appointment appointment = Appointment(
-                customerId, 
-                title.getText(), 
-                description.getText(), 
+
+        ZonedDateTime startDate = getZonedDateTimeFromControlls( startMonth,  startDay, startYear, 
+                startHour, startMinutes);
+
+        ZonedDateTime endDate = getZonedDateTimeFromControlls( endMonth, endDay,endYear, 
+                endHour, endMinutes);
+
+      
+        System.out.println("got date from controlls " + startDate);
+        Appointment appointment = new Appointment(
+                customer,
+                -1,
+                title.getText(),
+                description.getText(),
                 location.getText(),
                 contact.getText(),
                 url.getText(),
-                startDate, 
-                endDate );
+                startDate,
+                endDate);
         return appointment;
     }
-                   
-
-    
-
-    private void handleSave() {
-        Appointment appointment  = getAppointmentFromControlls();
-        
-        System.out.println("got customer");
-        if (appointment != null) {
-            //((CustomerController)invocator).addCustomerToListView(customer);
-            closeStage(actionEvent);
-        }
-    }
-
-    private Appointment Appointment(int customerId, String text, String text0, String text1, String text2, String text3, Date startDate, Date endDate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }
-

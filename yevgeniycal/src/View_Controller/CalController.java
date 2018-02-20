@@ -5,6 +5,8 @@
  */
 package View_Controller;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -14,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import yevgeniycal.YevgeniyCal;
 
 /**
@@ -23,10 +26,10 @@ import yevgeniycal.YevgeniyCal;
 public class CalController {
 
     private Stage dialogStage;
-     Stage stage;
-    
+    Stage stage;
+
     CalController invocator;
-    
+
     Object invocatorData;
 
     public void setDialogStage(Stage dialogStage) {
@@ -52,9 +55,9 @@ public class CalController {
     }
 
     public void setInvocator(Object invocator) {
-        this.invocator = (CalController)invocator;
+        this.invocator = (CalController) invocator;
     }
-    
+
     public void setStage(Stage _stage) {
         stage = _stage;
     }
@@ -63,7 +66,11 @@ public class CalController {
         this.invocatorData = invocatorData;
     }
 
-    void showErrorDialog(String errorMsg) {
+    public void initData() {
+
+    }
+
+    public void showErrorDialog(String errorMsg) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Error Dialog");
         alert.setHeaderText("Validation Error");
@@ -73,45 +80,42 @@ public class CalController {
     }
 
     boolean checkEmpty(String val, String valName) {
-        if (val.isEmpty() ) {
-            showErrorDialog(valName + "can't be empty");
+        if (val.isEmpty()) {
+            showErrorDialog(valName + " can't be empty");
             return false;
-        }      
+        }
         return true;
     }
-    
+
     boolean checkInteger(String val, String valName) {
-        
+
         try {
-        Integer.parseInt(val);
-                }
-        catch ( NumberFormatException e) {
+            Integer.parseInt(val);
+        } catch (NumberFormatException e) {
             showErrorDialog(valName + " must be Integer");
             return false;
         }
         return true;
-    } 
-   
+    }
+
     boolean checkDouble(String val, String valName) {
-        
+
         try {
             Double.parseDouble(val);
-        }
-        
-        catch ( NumberFormatException e) {
+        } catch (NumberFormatException e) {
             showErrorDialog(valName + " must be decimal");
             return false;
         }
         return true;
-    } 
-    
-  
+    }
+
    
+
     boolean showConfirmDialog(String msg) {
         Alert alert = new Alert(AlertType.CONFIRMATION,
-                msg, 
+                msg,
                 ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
-        
+
         Optional<ButtonType> showAndWait = alert.showAndWait();
 
         return showAndWait.get() == ButtonType.YES;

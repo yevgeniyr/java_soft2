@@ -5,7 +5,13 @@
  */
 package Model;
 
-import java.util.Date;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+
 
 /**
  *
@@ -13,16 +19,19 @@ import java.util.Date;
  */
 public class Appointment {
 
-    public Appointment(int customerId, 
-            String title, 
+    public Appointment(
+            Customer customer,
+            int appointmentId,
+            String title,
             String description,
-            String location, 
-            String contact, 
-            String url, 
-            Date startDate, 
-            Date endDate) {
-        this.customerId = customerId;
-
+            String location,
+            String contact,
+            String url,
+            ZonedDateTime startDate,
+            ZonedDateTime endDate
+    ) {
+        this.customer = customer;
+        this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
         this.location = location;
@@ -30,11 +39,22 @@ public class Appointment {
         this.url = url;
         this.startDate = startDate;
         this.endDate = endDate;
-            
+        //this.startDateStr =  DateFormat.getDateTimeInstance().format(startDate);
+        //System.out.println("HERE HERE" + startDateStr);
     }
 
 
- 
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) return true;
+        if (!(o instanceof Appointment)) {
+            return false;
+        }
+        Appointment appointment = (Appointment) o;
+        return appointment.appointmentId == appointmentId;
+    }
+    
     public int getAppointmentId() {
         return appointmentId;
     }
@@ -43,17 +63,23 @@ public class Appointment {
         this.appointmentId = appointmentId;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public String getCustomerName() {
+        return customer.getCustomerName();
+    }
+    
+    public String getStartDateFormatted() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm").withZone(ZoneId.systemDefault());
+
+        String formatDateTime = startDate.format(formatter);
+        return formatDateTime;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public String getEndDateFormatted() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm");
+
+        String formatDateTime = endDate.format(formatter);
+        return formatDateTime;
     }
-
-
-
-
     public String getTitle() {
         return title;
     }
@@ -94,21 +120,16 @@ public class Appointment {
         this.url = url;
     }
 
-    
-    public Date getStartDate() {
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
+    public ZonedDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public Customer getCustomer() {
+        return customer;
     }
 
     int appointmentId;
@@ -119,6 +140,9 @@ public class Appointment {
     String location;
     String contact;
     String url;
-    Date startDate;
-    Date endDate;
+
+    ZonedDateTime startDate;
+    ZonedDateTime endDate;
+    String startDateStr;
+    Customer customer;
 }

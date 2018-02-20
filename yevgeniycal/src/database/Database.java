@@ -17,7 +17,18 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import javax.xml.transform.Result;
 
 /**
@@ -27,15 +38,17 @@ import javax.xml.transform.Result;
 public class Database {
 
     private static Database database = null;
-
+    private static Database inMemDB = null;
+    private static final boolean useInMemoryDB = false;
     Connection conn = null;
 
-    private void connectMysql() {
+    private void connect() {
 
         String driver = "com.mysql.jdbc.Driver";
         String db = "U04iex";
         String url = "jdbc:mysql://52.206.157.109/" + db;
         String user = "U04iex";
+
         String pass = "53688251641";
 
         //  String driver = "com.mysql.jdbc.Driver";
@@ -58,20 +71,29 @@ public class Database {
         }
     }
 
-    public Customer[] getCustomers2() {
-        Address address = new Address(1, "477 Maddison Ave", "", new City(1, "New York"), "11111", "11111111111");
-        Address address2 = new Address(2, "1 Park Ave", "", new City(1, "Bostom"), "22222", "2222222222");
+    public Date utcToLocalDate(Date date) {
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        //1. Convert Date -> Instant
+        Instant instant = date.toInstant();
+        System.out.println("instant : " + instant); //Zone : UTC+0
 
-        Customer[] customers = {new Customer(1, "Yev", 1, address),
-            new Customer(2, "JOhn", 2, address2)};
-        return customers;
+        //2. Instant + system default time zone + toLocalDate() = LocalDate
+        LocalDate localDate = instant.atZone(defaultZoneId).toLocalDate();
+        return java.sql.Date.valueOf(localDate);
     }
 
     public static Database getInstance() {
+        if (useInMemoryDB) {
+            if (inMemDB == null) {
+                inMemDB = new MemDB();
+            }
+            return inMemDB;
+        }
+
         if (database == null) {
             database = new Database();
 
-            database.connectMysql();
+            database.connect();
         }
         return database;
     }
@@ -86,14 +108,14 @@ public class Database {
             statement.setString(2, password);
 
             ResultSet rs = statement.executeQuery();
-                        
-            if ( rs.next() ) {
+
+            if (rs.next()) {
                 userId = rs.getInt("userId");
             }
-            
+
             rs.close();
             statement.close();
- 
+
         } catch (SQLException e) {
             System.out.println("SQLException:" + e.getMessage());
             System.out.println("SQLState:" + e.getSQLState());
@@ -103,31 +125,9 @@ public class Database {
     }
 
     public ArrayList<Customer> getCustomers() {
-                ArrayList<Customer> customers;
-        customers = new ArrayList<>();
-        City city = new City(1,"new york");
-        
-                        Address address = new Address(
-                        777,
-                        "777 street",
-                        "a.address2",
-                                city,
-                        "777",
-                        "7777-77777");
-        Customer customer = new Customer(777,
-                        "yevgeniy",
-                        1,
-                        address);
-        customers.add(customer);
-        return customers;
-    }
-    
-    public ArrayList<Customer> getCustomers() {
         PreparedStatement statement;
         ArrayList<Customer> customers;
         customers = new ArrayList<>();
-        
-        ArrayList<Appointment> appointments;
 
         try {
             statement = conn.prepareStatement(
@@ -168,10 +168,6 @@ public class Database {
                         rs.getInt("c.active"),
                         address);
 
-                appointments = getAppointments(customer.getCustomerId());
-
-                customer.setAppointments(appointments);
-
                 customers.add(customer);
             }
             rs.close();
@@ -185,29 +181,66 @@ public class Database {
         return customers;
     }
 
-    ArrayList<Appointment> getAppointments(int customerId) {
+    public ArrayList<Appointment> getAppointments() {
         ArrayList<Appointment> appointments = new ArrayList<>();
+
         PreparedStatement statement;
         try {
             statement = conn.prepareStatement(
-                    "select customerId, appointmentId,title, description, location, contact, url, start, end"
-                    + " from appointment where customerId = ?"
+                    "select appointmentID,a.customerId,title,description,location,contact,url,start,end,"
+                    + "customerName, c.active, d.addressId as addressId, active, address, address2, ci.cityId as cityId, "
+                    + "postalCode, "
+                    + "phone,  city, country from appointment a, customer c, address d, city ci, "
+                    + "country co where a.customerId = c.customerID"
+                    + " and c.addressId = d.addressID and ci.cityID = d.cityId and "
+                    + "co.countryID = ci.countryId order by start"
             );
 
-            statement.setInt(1, customerId);
+            //statement.setInt(1, customerId);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
+                ZonedDateTime startDate;
+                ZonedDateTime endDate;
+
+                java.sql.Timestamp tsStart = rs.getTimestamp("start");
+
+                ZoneId localZoneId = ZoneId.systemDefault();
+
+                ZonedDateTime utcDateTime = tsStart.toLocalDateTime().atZone(ZoneId.of("UTC"));
+
+                startDate = utcDateTime.withZoneSameInstant(localZoneId);
+
+                java.sql.Timestamp tsEnd = rs.getTimestamp("end");
+
+                utcDateTime = tsEnd.toLocalDateTime().atZone(ZoneId.of("UTC"));
+
+                endDate = utcDateTime.withZoneSameInstant(localZoneId);
+
+                City city = new City(rs.getInt("cityId"), rs.getString("city"));
+
+                Address address = new Address(
+                        rs.getInt("d.addressId"),
+                        rs.getString("address"),
+                        rs.getString("address2"),
+                        city,
+                        rs.getString("postalCode"),
+                        rs.getString("phone"));
+
+                Customer newCustomer = new Customer(rs.getInt("a.customerId"),
+                        rs.getString("customerName"),
+                        rs.getInt("active"), address);
 
                 Appointment appointment = new Appointment(
-                        rs.getInt("customerId"),
+                        newCustomer,
                         rs.getInt("appointmentId"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("location"),
                         rs.getString("contact"),
                         rs.getString("url"),
-                        rs.getDate("start"),
-                        rs.getDate("end"));
+                        startDate,
+                        endDate
+                );
                 appointments.add(appointment);
             }
             rs.close();
@@ -230,15 +263,15 @@ public class Database {
             int userId) {
         PreparedStatement statement;
         int addressId = -1;
-        
+
         String userIdString = Integer.toString(userId);
-        
+
         try {
             String sql = "insert into address(address,address2,cityId,"
                     + "postalCode,phone,createDate,createdBy,lastUpdate,lastUpdateBy)"
                     + " values(?,?,?,?,?,NOW(),?,NOW(),?)";
 
-            statement = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, address);
             statement.setString(2, address2);
             statement.setInt(3, cityId);
@@ -264,7 +297,6 @@ public class Database {
     public int saveCustomer(String customerName,
             int addressId
     ) {
-
         PreparedStatement statement;
         int customerId = -1;
 
@@ -274,15 +306,15 @@ public class Database {
                     + "createDate,createdBy,lastUpdate,lastUpdateBy)"
                     + " values(?,?,?,NOW(),?,NOW(),?)";
 
-            statement = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, customerName);
             statement.setInt(2, addressId);
             statement.setInt(3, LoginController.getCurrentUser().getUserId());
             statement.setString(4, LoginController.getCurrentUser().getUserName());
             statement.setString(5, LoginController.getCurrentUser().getUserName());
-            
+
             statement.executeUpdate();
-            
+
             ResultSet rs = statement.getGeneratedKeys();
 
             if (rs.next()) {
@@ -298,4 +330,116 @@ public class Database {
         }
         return customerId;
     }
+
+    public void updateAppointment(
+            int appointmentId,
+            int customerId,
+            String title,
+            String description,
+            String location,
+            String contact,
+            String url,
+            ZonedDateTime startDate,
+            ZonedDateTime endDate
+    ) {
+        PreparedStatement statement;
+        try {
+            String sql = "update appointment set "
+                    + "  customerId = ?,"
+                    + "  title = ?,"
+                    + "  description = ?,"
+                    + "  location =?,"
+                    + "  contact =?,"
+                    + "  url =?,"
+                    + "  start = ?,"
+                    + "  end = ? where appointmentId = ?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, customerId);
+            statement.setString(2, title);
+            statement.setString(3, description);
+            statement.setString(4, location);
+            statement.setString(5, contact);
+            statement.setString(6, url);
+            statement.setTimestamp(7, getUTCTimestamp(startDate));
+            statement.setTimestamp(8, getUTCTimestamp(endDate));
+            statement.setInt(9, appointmentId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("SQLException:" + e.getMessage());
+            System.out.println("SQLState:" + e.getSQLState());
+            System.out.println("VendorError:" + e.getErrorCode());
+        }
+    }
+
+    Timestamp getUTCTimestamp(ZonedDateTime date) {
+
+        ZonedDateTime utcStart = date.withZoneSameInstant(ZoneId.of("UTC"));
+        Timestamp tsStart = Timestamp.valueOf(utcStart.toLocalDateTime());
+        return tsStart;
+    }
+
+    public int saveAppointment(String title,
+            String description,
+            String location,
+            String contact,
+            String url,
+            ZonedDateTime startDate,
+            ZonedDateTime endDate,
+            int customerId) {
+        PreparedStatement statement;
+        int appointmentId = -1;
+
+        try {
+            String sql = "insert into appointment (customerId,"
+                    + "title,description,location,contact,url,start,end,createDate,createdBy,lastUpdate,lastUpdateBy) "
+                    + "values(?,?,?,?,?,?,?,?,NOW(),?,NOW(),?)";
+
+            statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, customerId);
+            statement.setString(2, title);
+            statement.setString(3, description);
+            statement.setString(4, location);
+            statement.setString(5, contact);
+            statement.setString(6, url);
+            statement.setTimestamp(7, getUTCTimestamp(startDate));
+            statement.setTimestamp(8, getUTCTimestamp(endDate));
+            statement.setString(9, LoginController.getCurrentUser().getUserName());
+            statement.setString(10, LoginController.getCurrentUser().getUserName());
+
+            statement.executeUpdate();
+
+            ResultSet rs = statement.getGeneratedKeys();
+
+            if (rs.next()) {
+                appointmentId = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQLException:" + e.getMessage());
+            System.out.println("SQLState:" + e.getSQLState());
+            System.out.println("VendorError:" + e.getErrorCode());
+
+        }
+        return appointmentId;
+    }
+
+    public void removeAppointment(int appointmentId) {
+        PreparedStatement statement;
+
+        try {
+            String sql = "delete from appointment where appointmentId = ?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, appointmentId);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("SQLException:" + e.getMessage());
+            System.out.println("SQLState:" + e.getSQLState());
+            System.out.println("VendorError:" + e.getErrorCode());
+
+        }
+    }
+
 }
